@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { PostEntity } from '../post/post.entity';
 
 @Entity()
 export class BlogEntity {
@@ -10,4 +11,7 @@ export class BlogEntity {
 
   @Column()
   date: Date;
+
+  @OneToMany(() => PostEntity, (post) => post.blog)
+  posts: PostEntity[];
 }

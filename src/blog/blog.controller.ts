@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { BlogDto } from './blog.dto';
 import { BlogService } from './blog.service';
 import {
@@ -15,8 +24,13 @@ export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @Get()
-  blogs(): BlogDto[] {
-    return this.blogService.getBlogs();
+  async blogs(): Promise<BlogDto[]> {
+    return await this.blogService.getBlogs();
+  }
+
+  @Get(':id')
+  blog(@Param('id') id: number): Promise<BlogDto> {
+    return this.blogService.getBlog(id);
   }
 
   @Post()
@@ -24,7 +38,17 @@ export class BlogController {
     description: 'Created',
   })
   @ApiBadRequestResponse()
-  create(@Body() blog: BlogDto): void {
-    this.logger.log('create');
+  create(@Body() blog: BlogDto): Promise<void> {
+    return this.blogService.createBlog(blog);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: number, @Body() blog: BlogDto): Promise<void> {
+    return this.blogService.updateBlog(id, blog);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number): Promise<void> {
+    return this.blogService.deleteBlog(id);
   }
 }
