@@ -43,7 +43,7 @@ export class BlogService {
   async updateBlog(id: number, blogDto: BlogDto): Promise<void> {
     this.logger.log('updateBlog');
     const entity = await this.blogRepository.preload({
-      id,
+      id: +id,
       ...blogDto,
     });
     await this.blogRepository.save(entity);
